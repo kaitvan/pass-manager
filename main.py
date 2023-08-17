@@ -62,11 +62,21 @@ def save():
 # ---------------------------- SEARCH ------------------------------- #
 def search():
     website = website_entry.get().lower()
-    with open("data.json", "r") as data_file:
-        data = json.load(data_file)
-        username = data[website]["username"]
-        password = data[website]["password"]
-    messagebox.showinfo(title=website.title(), message=f"Username: {username}\n Password: {password}")
+    if len(website) == 0:
+        messagebox.showinfo(title="Error", message="Please enter a website to search.")
+    else:
+        try:
+            with open("data.json", "r") as data_file:
+                data = json.load(data_file)
+        except FileNotFoundError:
+            messagebox.showinfo(title="Error", message=f"The website {website.title()} was not found.")
+        else:
+            if website in data:
+                username = data[website]["username"]
+                password = data[website]["password"]
+                messagebox.showinfo(title=website.title(), message=f"Username: {username}\n Password: {password}")
+            else:
+                messagebox.showinfo(title="Error", message=f"The website {website.title()} was not found.")
 
 
 # ---------------------------- UI SETUP ------------------------------- #
