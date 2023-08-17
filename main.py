@@ -29,8 +29,8 @@ def generate_password():
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
-    website = website_entry.get()
-    username = username_entry.get()
+    website = website_entry.get().lower()
+    username = username_entry.get().lower()
     password = password_entry.get()
 
     new_data = {
@@ -59,6 +59,16 @@ def save():
             password_entry.delete(0, END)
 
 
+# ---------------------------- SEARCH ------------------------------- #
+def search():
+    website = website_entry.get().lower()
+    with open("data.json", "r") as data_file:
+        data = json.load(data_file)
+        username = data[website]["username"]
+        password = data[website]["password"]
+    messagebox.showinfo(title=website.title(), message=f"Username: {username}\n Password: {password}")
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.title("Password Manager")
@@ -72,9 +82,12 @@ canvas.grid(column=1, row=0)
 website_label = Label(text="Website:", anchor="e", width=17)
 website_label.grid(column=0, row=1)
 
-website_entry = Entry(width=40)
-website_entry.grid(column=1, row=1, columnspan=2)
+website_entry = Entry(width=22)
+website_entry.grid(column=1, row=1)
 website_entry.focus()
+
+search_btn = Button(text="Search", command=search, width=13)
+search_btn.grid(column=2, row=1)
 
 username_label = Label(text="Email/Username:", anchor="e", width=17)
 username_label.grid(column=0, row=2)
